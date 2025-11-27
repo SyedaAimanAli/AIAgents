@@ -7,7 +7,7 @@ import os
 import sys
 import chardet
 sys.path.append(os.path.dirname(__file__))
-os.environ['GOOGLE_ADK_API_KEY'] = 'AIzaSyCCxO72g3PQ-IzjMro0UglRoqGWhStVjk0'
+os.environ['GOOGLE_ADK_API_KEY'] = 'YOUR_API_KEY'
 
 
 from agents.data_cleaning import DataCleaningAgent, AgentResult as CleaningResult
