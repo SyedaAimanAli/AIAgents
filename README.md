@@ -1,4 +1,4 @@
-# AIAgents — Multi-Agent Data Analysis System
+# Multi-Agent Data Analysis System
 
 AIAgents is a modular, asynchronous data-analysis pipeline built using Python.  
 It processes CSV datasets through multiple “agents”, each responsible for a specific analytical task—cleaning, EDA, anomaly detection, ML modeling, business insights, and report generation.
@@ -132,7 +132,7 @@ Compiles everything into a polished multi-page PDF.
 
 ---
 
-## 🛠️ Future Improvements (Planned)
+## Future Improvements (Planned)
 
 * Add more visualizations
 * Support Excel/JSON uploads
@@ -145,8 +145,5 @@ Compiles everything into a polished multi-page PDF.
 
 MIT License — free to use in research, commercial or personal projects.
 
-```
 
 
-Just tell me the style you prefer.
-```
