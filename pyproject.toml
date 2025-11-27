@@ -1,0 +1,16 @@
+[project]
+name = "aiagents"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "chardet>=5.2.0",
+    "flask>=3.1.2",
+    "google>=3.0.0",
+    "google-genai>=1.52.0",
+    "matplotlib>=3.10.7",
+    "pandas>=2.3.3",
+    "reportlab>=4.4.5",
+    "scikit-learn>=1.7.2",
+]

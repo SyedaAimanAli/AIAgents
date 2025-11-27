@@ -1,0 +1,415 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Data Analysis – Multi-Agent Pipeline</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --canva-purple: #7d2ae8;
+            --canva-blue: #00c4cc;
+            --canva-pink: #ff5757;
+            --canva-yellow: #ffcd1f;
+            --canva-dark: #1e1e1e;
+            --canva-light: #f7f7f7;
+            --canva-teal: #00c2cb;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #7d2ae8 0%, #00c4cc 100%);
+            min-height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+        }
+        
+        /* Loading Overlay */
+        #loadingOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.98);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            z-index: 9999;
+        }
+        
+        .spinner-container {
+            position: relative;
+            width: 120px;
+            height: 120px;
+        }
+        
+        .spinner-border {
+            width: 80px;
+            height: 80px;
+            border-width: 5px;
+            border-color: var(--canva-purple);
+            border-right-color: transparent;
+        }
+        
+        .loading-text {
+            margin-top: 1.5rem;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--canva-dark);
+        }
+        
+        .loading-subtext {
+            margin-top: 0.5rem;
+            font-size: 1rem;
+            color: #666;
+            text-align: center;
+            max-width: 300px;
+        }
+        
+        /* Main Container */
+        .main-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 2rem 0;
+        }
+        
+        /* Card Styling */
+        .analysis-card {
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            max-width: 950px;
+            margin: 0 auto;
+        }
+        
+        .card-header-custom {
+            background: white;
+            padding: 3rem 2.5rem 2rem 2.5rem;
+            text-align: center;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .logo-section {
+            margin-bottom: 1.5rem;
+        }
+        
+        .logo-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--canva-purple) 0%, var(--canva-blue) 100%);
+            border-radius: 16px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            box-shadow: 0 4px 12px rgba(125, 42, 232, 0.3);
+        }
+        
+        .card-header-custom h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--canva-purple) 0%, var(--canva-blue) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .card-header-custom p {
+            margin: 0;
+            color: #666;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+        
+        .card-body-custom {
+            padding: 2.5rem;
+        }
+        
+        /* Features Section */
+        .features-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .feature-box {
+            text-align: center;
+            padding: 1.5rem 1rem;
+            background: var(--canva-light);
+            border-radius: 16px;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .feature-box:hover {
+            transform: translateY(-5px);
+            border-color: var(--canva-purple);
+            box-shadow: 0 8px 20px rgba(125, 42, 232, 0.15);
+        }
+        
+        .feature-box i {
+            font-size: 2.2rem;
+            margin-bottom: 0.75rem;
+            background: linear-gradient(135deg, var(--canva-purple) 0%, var(--canva-blue) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .feature-box h6 {
+            font-weight: 700;
+            color: var(--canva-dark);
+            margin-bottom: 0.25rem;
+            font-size: 0.95rem;
+        }
+        
+        .feature-box p {
+            font-size: 0.85rem;
+            color: #666;
+            margin: 0;
+        }
+        
+        /* Form Styling */
+        .form-section {
+            background: white;
+            padding: 0;
+            border-radius: 0;
+            margin-bottom: 1rem;
+        }
+        
+        .form-label {
+            font-weight: 700;
+            color: var(--canva-dark);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.95rem;
+        }
+        
+        .form-label i {
+            color: var(--canva-purple);
+            font-size: 1.1rem;
+        }
+        
+        .form-control {
+            border-radius: 12px;
+            border: 2px solid #e0e0e0;
+            padding: 0.9rem 1rem;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+        }
+        
+        .form-control:focus {
+            border-color: var(--canva-purple);
+            box-shadow: 0 0 0 4px rgba(125, 42, 232, 0.1);
+        }
+        
+        /* Button Styling */
+        .btn-analyze {
+            background: linear-gradient(135deg, var(--canva-purple) 0%, var(--canva-blue) 100%);
+            border: none;
+            color: white;
+            padding: 1.1rem 2rem;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border-radius: 12px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 16px rgba(125, 42, 232, 0.3);
+        }
+        
+        .btn-analyze:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(125, 42, 232, 0.4);
+        }
+        
+        .btn-analyze i {
+            margin-right: 0.5rem;
+        }
+        
+        /* Info Box */
+        .info-box {
+            background: linear-gradient(135deg, #f0e7ff 0%, #e0f7ff 100%);
+            border-left: 4px solid var(--canva-purple);
+            padding: 1.25rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+        }
+        
+        .info-box i {
+            color: var(--canva-purple);
+            margin-right: 0.5rem;
+            font-size: 1.1rem;
+        }
+        
+        .info-box p {
+            margin: 0;
+            font-size: 0.95rem;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .info-box strong {
+            color: var(--canva-dark);
+        }
+        
+        /* Animation */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .analysis-card {
+            animation: fadeInUp 0.6s ease-out;
+        }
+        
+        /* Footer */
+        .footer-text {
+            text-align: center;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #f0f0f0;
+        }
+        
+        .footer-text small {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .footer-text i {
+            color: var(--canva-teal);
+            margin-right: 0.25rem;
+        }
+    </style>
+</head>
+<body>
+<!-- Loading Overlay -->
+<div id="loadingOverlay">
+    <div class="spinner-container">
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+    <div class="loading-text">Processing Your Dataset</div>
+    <div class="loading-subtext">Our AI agents are analyzing your data...</div>
+</div>
+
+<div class="main-container">
+    <div class="container">
+        <div class="analysis-card">
+            <!-- Header -->
+            <div class="card-header-custom">
+                <div class="logo-section">
+                    <div class="logo-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                </div>
+                <h1>AI Data Analysis</h1>
+                <p>Multi-Agent Pipeline • Powered by Gemini</p>
+            </div>
+            
+            <!-- Body -->
+            <div class="card-body-custom">
+                <!-- Features Grid -->
+                <div class="features-section">
+                    <div class="feature-box">
+                        <i class="fas fa-broom"></i>
+                        <h6>Data Cleaning</h6>
+                        <p>Automated preprocessing</p>
+                    </div>
+                    <div class="feature-box">
+                        <i class="fas fa-chart-line"></i>
+                        <h6>EDA Analysis</h6>
+                        <p>Visual insights</p>
+                    </div>
+                    <div class="feature-box">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <h6>Anomaly Detection</h6>
+                        <p>Outlier identification</p>
+                    </div>
+                    <div class="feature-box">
+                        <i class="fas fa-robot"></i>
+                        <h6>ML Modeling</h6>
+                        <p>Feature importance</p>
+                    </div>
+                </div>
+                
+                <!-- Info Box -->
+                <div class="info-box">
+                    <p><i class="fas fa-info-circle"></i><strong>How it works:</strong> Upload your CSV file, optionally specify a target column, and let our AI agents handle the rest. You'll receive a comprehensive PDF report with insights and recommendations.</p>
+                </div>
+                
+                <!-- Form -->
+                <form id="analysisForm" method="POST" action="/analyze" enctype="multipart/form-data">
+                    <div class="form-section">
+                        <div class="mb-4">
+                            <label class="form-label">
+                                <i class="fas fa-file-csv"></i>
+                                Upload Your CSV File
+                            </label>
+                            <input class="form-control" type="file" name="file" accept=".csv" required>
+                            <small class="text-muted mt-2 d-block">
+                                <i class="fas fa-check-circle" style="color: var(--canva-teal);"></i> Supported format: CSV files only
+                            </small>
+                        </div>
+                        
+                        <div class="mb-0">
+                            <label class="form-label">
+                                <i class="fas fa-bullseye"></i>
+                                Target Column (Optional)
+                            </label>
+                            <input class="form-control" type="text" name="target" placeholder="e.g., profit, sales, revenue">
+                            <small class="text-muted mt-2 d-block">
+                                <i class="fas fa-lightbulb" style="color: var(--canva-yellow);"></i> Specify the column you want to predict or analyze
+                            </small>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-analyze w-100 mt-4" type="submit">
+                        <i class="fas fa-rocket"></i>
+                        Start Analysis
+                    </button>
+                </form>
+                
+                <!-- Footer Info -->
+                <div class="footer-text">
+                    <small>
+                        <i class="fas fa-shield-alt"></i> Your data is processed securely and never stored
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById("analysisForm").addEventListener("submit", function(e) {
+        const fileInput = document.querySelector('input[type="file"]');
+        if (fileInput.files.length === 0) {
+            e.preventDefault();
+            alert('Please select a CSV file to upload.');
+            return;
+        }
+        document.getElementById("loadingOverlay").style.display = "flex";
+    });
+</script>
+</body>
+</html>

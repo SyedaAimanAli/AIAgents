@@ -1,0 +1,440 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analysis Results – Multi-Agent Pipeline</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --canva-purple: #8b3dff;
+            --canva-blue: #00c4cc;
+            --canva-pink: #ff5757;
+            --canva-yellow: #ffcd00;
+            --canva-dark: #1e1e2f;
+            --canva-light: #f0f3f5;
+            --canva-success: #00d084;
+        }
+        
+        body {
+            background: var(--canva-light);
+            min-height: 100vh;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            padding: 2rem 0;
+        }
+        
+        /* Success Header */
+        .success-header {
+            background: linear-gradient(135deg, var(--canva-success) 0%, var(--canva-blue) 100%);
+            color: white;
+            padding: 2.5rem;
+            border-radius: 24px 24px 0 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .success-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
+            animation: pulse 3s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.8; }
+        }
+        
+        .success-header i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            animation: bounceIn 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            position: relative;
+            z-index: 1;
+        }
+        
+        @keyframes bounceIn {
+            0% { transform: scale(0); opacity: 0; }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .success-header h1 {
+            font-size: 2.25rem;
+            font-weight: 800;
+            margin: 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .success-header p {
+            margin: 0.5rem 0 0 0;
+            opacity: 0.95;
+            position: relative;
+            z-index: 1;
+            font-weight: 500;
+        }
+        
+        /* Main Card */
+        .results-card {
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            max-width: 1100px;
+            margin: 0 auto;
+            animation: fadeInUp 0.6s ease-out;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .card-body-custom {
+            padding: 2.5rem;
+        }
+        
+        /* Download Button */
+        .download-section {
+            background: linear-gradient(135deg, #f5f7ff 0%, #e8f0ff 100%);
+            padding: 2rem;
+            border-radius: 16px;
+            margin-bottom: 2.5rem;
+            text-align: center;
+            border: 2px solid #e0e8ff;
+        }
+        
+        .download-section h5 {
+            font-weight: 700;
+            color: var(--canva-dark);
+            margin-bottom: 1.25rem;
+        }
+        
+        .download-section h5 i {
+            color: var(--canva-pink);
+            margin-right: 0.5rem;
+        }
+        
+        .btn-download {
+            background: linear-gradient(135deg, var(--canva-purple) 0%, var(--canva-blue) 100%);
+            border: none;
+            color: white;
+            padding: 1.125rem 2.5rem;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border-radius: 12px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 16px rgba(139, 61, 255, 0.3);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+        }
+        
+        .btn-download:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(139, 61, 255, 0.4);
+            color: white;
+        }
+        
+        .btn-download i {
+            font-size: 1.3rem;
+        }
+        
+        /* Section Headers */
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 3px solid var(--canva-light);
+        }
+        
+        .section-header i {
+            font-size: 1.5rem;
+            color: var(--canva-purple);
+        }
+        
+        .section-header h4 {
+            margin: 0;
+            font-weight: 800;
+            color: var(--canva-dark);
+        }
+        
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.25rem;
+            margin-bottom: 2.5rem;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 1.75rem;
+            border-radius: 16px;
+            border: 2px solid #e8ebed;
+            text-align: center;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+            border-color: var(--canva-purple);
+        }
+        
+        .stat-card:nth-child(1) { border-color: var(--canva-purple); }
+        .stat-card:nth-child(2) { border-color: var(--canva-blue); }
+        .stat-card:nth-child(3) { border-color: var(--canva-success); }
+        .stat-card:nth-child(4) { border-color: var(--canva-yellow); }
+        
+        .stat-card:nth-child(1) i { color: var(--canva-purple); }
+        .stat-card:nth-child(2) i { color: var(--canva-blue); }
+        .stat-card:nth-child(3) i { color: var(--canva-success); }
+        .stat-card:nth-child(4) i { color: var(--canva-yellow); }
+        
+        .stat-card i {
+            font-size: 2.5rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        .stat-card h5 {
+            font-size: 2rem;
+            font-weight: 800;
+            margin: 0.5rem 0;
+            color: var(--canva-dark);
+        }
+        
+        .stat-card p {
+            margin: 0;
+            color: #666;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        
+        /* Status Table */
+        .status-table {
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            border: 2px solid #e8ebed;
+        }
+        
+        .status-table thead {
+            background: linear-gradient(135deg, var(--canva-purple) 0%, var(--canva-blue) 100%);
+            color: white;
+        }
+        
+        .status-table th {
+            font-weight: 700;
+            padding: 1.125rem;
+            border: none;
+        }
+        
+        .status-table td {
+            padding: 1.125rem;
+            vertical-align: middle;
+        }
+        
+        .status-table tbody tr {
+            transition: background-color 0.2s;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .status-table tbody tr:hover {
+            background-color: #fafbfc;
+        }
+        
+        /* Status Badge */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.875rem;
+        }
+        
+        .status-success {
+            background-color: #e6f9f0;
+            color: var(--canva-success);
+        }
+        
+        .status-error {
+            background-color: #ffe6e6;
+            color: var(--canva-pink);
+        }
+        
+        /* Insights Section */
+        .insights-box {
+            background: linear-gradient(135deg, #fff9e6 0%, #ffe8cc 100%);
+            padding: 1.75rem;
+            border-radius: 16px;
+            border-left: 5px solid var(--canva-yellow);
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        
+        .insights-box p {
+            margin: 0;
+            line-height: 1.7;
+            color: var(--canva-dark);
+            font-size: 0.95rem;
+        }
+        
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2.5rem;
+            padding-top: 2rem;
+            border-top: 2px solid var(--canva-light);
+        }
+        
+        .btn-secondary-custom {
+            background: var(--canva-dark);
+            color: white;
+            padding: 0.875rem 2rem;
+            font-weight: 700;
+            border-radius: 12px;
+            border: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+        
+        .btn-secondary-custom:hover {
+            background: #2d2d42;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(30, 30, 47, 0.3);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="results-card">
+        <!-- Success Header -->
+        <div class="success-header">
+            <i class="fas fa-check-circle"></i>
+            <h1>Analysis Completed Successfully!</h1>
+            <p>Your multi-agent pipeline has finished processing your dataset</p>
+        </div>
+        
+        <!-- Body -->
+        <div class="card-body-custom">
+            <!-- Download Section -->
+            <div class="download-section">
+                <h5><i class="fas fa-file-pdf"></i>Your Report is Ready</h5>
+                <a href="/download?path={{ pdf_path }}" class="btn-download">
+                    <i class="fas fa-download"></i>
+                    Download PDF Report
+                </a>
+            </div>
+            
+            <!-- Stats Grid -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <i class="fas fa-robot"></i>
+                    <h5>{{ results|length }}</h5>
+                    <p>Agents Executed</p>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-clock"></i>
+                    <h5>{{ "%.1f" | format(results.values()|map(attribute='execution_time')|sum) }}s</h5>
+                    <p>Total Time</p>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-check-double"></i>
+                    <h5>{{ results.values()|selectattr('status', 'equalto', 'success')|list|length }}</h5>
+                    <p>Successful</p>
+                </div>
+                {% if target_column %}
+                <div class="stat-card">
+                    <i class="fas fa-bullseye"></i>
+                    <h5>{{ target_column }}</h5>
+                    <p>Target Column</p>
+                </div>
+                {% endif %}
+            </div>
+            
+            <!-- Agent Status -->
+            <div class="section-header">
+                <i class="fas fa-tasks"></i>
+                <h4>Agent Execution Status</h4>
+            </div>
+            
+            <table class="table status-table">
+                <thead>
+                    <tr>
+                        <th><i class="fas fa-robot me-2"></i>Agent Name</th>
+                        <th><i class="fas fa-signal me-2"></i>Status</th>
+                        <th><i class="fas fa-stopwatch me-2"></i>Execution Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for key, r in results.items() %}
+                    <tr>
+                        <td><strong>{{ r.agent_name }}</strong></td>
+                        <td>
+                            {% if r.status == 'success' %}
+                            <span class="status-badge status-success">
+                                <i class="fas fa-check-circle"></i> Success
+                            </span>
+                            {% else %}
+                            <span class="status-badge status-error">
+                                <i class="fas fa-times-circle"></i> Error
+                            </span>
+                            {% endif %}
+                        </td>
+                        <td>{{ "%.2f" | format(r.execution_time) }}s</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            
+            <!-- Insights Summary -->
+            <div class="section-header mt-5">
+                <i class="fas fa-lightbulb"></i>
+                <h4>Executive Summary</h4>
+            </div>
+            
+            <div class="insights-box">
+                {% if insights.data and 'executive_summary' in insights.data %}
+                    <p>{{ insights.data['executive_summary'] }}</p>
+                {% else %}
+                    <p><i class="fas fa-info-circle me-2"></i>No executive summary available. Please check the detailed PDF report for complete insights.</p>
+                {% endif %}
+            </div>
+            
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <a href="/" class="btn-secondary-custom">
+                    <i class="fas fa-redo"></i>
+                    Run Another Analysis
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
