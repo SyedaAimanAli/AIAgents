@@ -1,172 +1,152 @@
-# Multi-Agent Automated Data Analysis Pipeline
+# AIAgents — Multi-Agent Data Analysis System
 
-### End-to-End Analysis • Business Insights • PDF Reporting • Flask UI • ADK (Gemini) Enhanced
+AIAgents is a modular, asynchronous data-analysis pipeline built using Python.  
+It processes CSV datasets through multiple “agents”, each responsible for a specific analytical task—cleaning, EDA, anomaly detection, ML modeling, business insights, and report generation.
 
-This project is a **complete automated data-analysis system** powered by a **multi-agent architecture**, Google’s **ADK (Gemini)** intelligence, and a clean **Flask web interface**.
-
-Upload any CSV file, and the system performs:
-
-✔ Data Cleaning
-✔ Exploratory Data Analysis (EDA)
-✔ Anomaly Detection
-✔ Machine-Learning Modeling
-✔ Business Insights (via ADK)
-✔ Exported PDF Report
-✔ All via an orchestrated asynchronous pipeline
+The system can run standalone via `main.py` or through a clean Flask-based UI.
 
 ---
 
-## Features
+## Key Features
 
-### ** 1. Multi-Agent AI Architecture**
+- **Multi-Agent Architecture**  
+  Each step of the pipeline is handled by a dedicated agent:
+  - Data Cleaning Agent  
+  - EDA (Exploratory Data Analysis) Agent  
+  - Anomaly Detection Agent  
+  - Machine Learning Agent  
+  - Business Insights Agent  
+  - Report Generation Agent  
 
-Each part of the workflow is handled by an independent agent:
+- **Automatic PDF Reporting**  
+  Generates a neatly formatted PDF summarizing:
+  - Insights  
+  - Visualizations  
+  - Key findings  
+  - Model analysis  
+  - Anomaly summaries  
 
-| Agent                               | Responsibilities                                                |
-| ----------------------------------- | --------------------------------------------------------------- |
-| **Data Cleaning Agent**             | Missing values, duplicates, column fixes, summary generation    |
-| **EDA Agent**                       | Visualizations (encoded), distributions, correlations           |
-| **Anomaly Agent**                   | Outlier detection + anomaly summary                             |
-| **ML Agent**                        | Auto-ML model training, prediction analysis, feature importance |
-| **Insights Agent (Gemini-powered)** | Business-level insights + executive summary                     |
-| **Report Agent**                    | Creates a professional PDF report                               |
+- **Optional AI (Google ADK/Gemini) Enhancements**
+  - Executive summary generation  
+  - Data-cleaning strategy suggestions  
+  - Insight/interpretation generation  
 
----
+- **Flask Web UI**  
+  Allows uploading a CSV file → running pipeline → downloading report.
 
-## 🧠 Powered by Google ADK (Gemini)
-
-If an ADK API key is provided, agents additionally use Gemini to:
-
-* Suggest better cleaning strategies
-* Provide structured insights
-* Generate a human-friendly **Executive Summary**
-* Assist in report creation
-
-The system works **with or without** ADK enabled.
-
----
-
-## Flask Web Interface
-
-A clean UI allows users to:
-
-### ✔ Upload CSV file
-
-### ✔ (Optional) Specify a target column (for supervised ML)
-
-### ✔ See real-time "Processing…" loader
-
-### ✔ Download the generated PDF
-
-### ✔ View agent execution summary + insights
+- **Sample Dataset Generator**  
+  Useful for testing the pipeline instantly without uploading anything.
 
 ---
 
 ## Project Structure
 
 ```
-/project
-├── agents/ 
-├── main.py
-├── dataset.py # (optional) dataset generator for demo/sample
-├── report logic, etc.
 
-/webapp 
-├── app.py 
-├── templates/ # HTML templates (index, results)
-└── static/ # (optional) CSS / assets
-```
+AIAgents/
+│
+├── project/
+│   ├── agents/
+│   │   ├── anomaly.py
+│   │   ├── data_cleaning.py
+│   │   ├── eda_agent.py
+│   │   ├── insights.py
+│   │   ├── ml_model.py
+│   │   └── report.py
+│   │
+│   ├── dataset.py
+│   └── main.py              # Orchestrates the entire pipeline
+│
+├── webapp/
+│   ├── app.py               # Flask server
+│   ├── templates/
+│   │   ├── index.html
+│   │   └── results.html
+│   └── static/              # CSS/JS (optional)
+│
+├── README.md
+└── uv.lock / pyproject.toml  # Dependencies
+
+````
 
 ---
 
-## Installation & Setup
+## How to Run (Local Machine)
 
-### **1. Clone the repository**
-
-```bash
-git clone https://github.com/yourusername/yourrepo.git
-cd yourrepo
-```
-
-### **2. Install dependencies**
-
+### **1. Install Dependencies**
 ```bash
 pip install -r requirements.txt
-```
+````
 
-### **3. (Optional) Set ADK API Key**
-
-```bash
-export GOOGLE_ADK_API_KEY="YOUR_API_KEY"
-```
-
-### **4. Run the Flask app**
+### **2. (Optional) Add ADK API Key**
 
 ```bash
-python app.py
+export GOOGLE_ADK_API_KEY="your_api_key"
 ```
 
-Then visit:
+### **3. Run Flask UI**
 
+```bash
+python webapp/app.py
 ```
-http://127.0.0.1:5000
-```
+
+Then open in your browser:
+[http://127.0.0.1:5000](http://127.0.0.1:5000)
 
 ---
 
-##  How It Works
+## Agents Overview
 
-### **Step 1 — Upload CSV**
+### **Data Cleaning Agent**
 
-The user uploads a dataset through the web interface.
+Cleans missing values, fixes types, removes duplicates, prepares dataset.
 
-### **Step 2 — Multi-Agent Execution**
+### **EDA Agent**
 
-`run_pipeline()` orchestrates all agents asynchronously.
+Generates visualizations and dataset summaries.
 
-### **Step 3 — Insights + Report**
+### **Anomaly Detection Agent**
 
-Gemini generates insights and a natural language executive summary.
+Identifies numeric outliers using IQR-based thresholds.
 
-### **Step 4 — PDF Output**
+### **Machine Learning Agent**
 
-A clean, structured PDF is created by the Report Agent using ReportLab.
+Builds a simple model (regression or classification) and outputs feature importance.
 
----
+### **Business Insights Agent**
 
-## Example Output (Summary)
+Creates executive summary + actionable insights (ADK optional).
 
-* Dataset shape
-* Cleaning steps performed
-* EDA visuals & findings
-* Anomaly detection results
-* ML feature importance
-* AI-generated Executive Summary
-* Full insights section
-* Agent execution time table
+### **Report Generation Agent**
+
+Compiles everything into a polished multi-page PDF.
 
 ---
 
-## Known Limitations / Caveats
+## Why This Project Exists
 
-For complex datasets (text, nested data, custom formats) — you may need to extend agents
-
-ML agent uses a basic model; not intended for production-grade model performance
-
-ADK integration optional; if API key not provided, insight generation is fallback/basic logic
-
-Large CSVs may take time — pipeline is synchronous per request (no background queue)
+* Demonstrate multi-agent architecture
+* Provide fast automated dataset analysis
+* Show integration of classical ML + AI models
+* Serve as a reusable pipeline for analytics, hackathons, prototypes
 
 ---
 
-## Contributing
+## 🛠️ Future Improvements (Planned)
 
-Pull requests are welcome. For major changes, open an issue first to discuss what you want to add.
+* Add more visualizations
+* Support Excel/JSON uploads
+* Improve Flask UI dashboard
+* Add background processing
 
 ---
 
 ## License
 
-MIT License — feel free to use and modify.
+MIT License — free to use in research, commercial or personal projects.
+
+```
 
 
+Just tell me the style you prefer.
+```
