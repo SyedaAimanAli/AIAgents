@@ -1,10 +1,3 @@
-Here you go — a **clean, polished, professional README.md** designed exactly for a GitHub project.
-It presents your multi-agent pipeline, ADK integration, Flask UI, and features in a way that looks impressive and “portfolio-ready”.
-
-You can copy–paste **as is** into your repo.
-
----
-
 # Multi-Agent Automated Data Analysis Pipeline
 
 ### End-to-End Analysis • Business Insights • PDF Reporting • Flask UI • ADK (Gemini) Enhanced
@@ -184,3 +177,4 @@ Pull requests are welcome. For major changes, open an issue first to discuss wha
 ## License
 
 MIT License — feel free to use and modify.
+
