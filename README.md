@@ -147,24 +147,15 @@ A clean, structured PDF is created by the Report Agent using ReportLab.
 
 ---
 
-## Why This Project Is Valuable
+## Known Limitations / Caveats
 
-This project demonstrates:
+For complex datasets (text, nested data, custom formats) — you may need to extend agents
 
-* Real multi-agent design
-* Practical AI integration
-* Clean full-stack development
-* Async orchestration
-* Automated reporting
-* Real-world dataset processing pipeline
+ML agent uses a basic model; not intended for production-grade model performance
 
-Perfect for:
+ADK integration optional; if API key not provided, insight generation is fallback/basic logic
 
-* Kaggle pipelines
-* AI engineering portfolios
-* Automated analytics tools
-* Enterprise internal dashboards
-* Capstone projects
+Large CSVs may take time — pipeline is synchronous per request (no background queue)
 
 ---
 
@@ -177,4 +168,5 @@ Pull requests are welcome. For major changes, open an issue first to discuss wha
 ## License
 
 MIT License — feel free to use and modify.
+
 
